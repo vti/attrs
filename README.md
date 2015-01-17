@@ -25,7 +25,7 @@ sub new {
 I want this to be simplified, clear, correctly work with inheritance, being able
 to overwrite super arguments or initialization phase.
 
-Hense `attrs`!
+Hence `attrs`!
 
 ```
 package Foo;
