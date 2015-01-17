@@ -1,6 +1,6 @@
 # Perl attributes
 
-When I need attributes in Perl, I don't need accessor or mutators, I actually
+When I need attributes in Perl, I don't need accessors or mutators, I actually
 need this:
 
 ```
