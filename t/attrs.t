@@ -119,7 +119,7 @@ subtest 'upgrading raw classes' => sub {
         use base 'RawBase';
         use attrs 'bar';
 
-        sub SUPER_ARGS { shift->SUPER::new(@_) }
+        sub SUPER_CALL { shift->SUPER::new(@_) }
     }
 
     is(Upgraded->new(bar => 1)->{bar},   1);

@@ -61,8 +61,8 @@ sub import {
         }
 
         my $self;
-        if (@$parents > 1 && $class->can('SUPER_ARGS')) {
-            $self = $class->SUPER_ARGS(%params);
+        if (@$parents > 1 && $class->can('SUPER_CALL')) {
+            $self = $class->SUPER_CALL(%params);
         }
         else {
             $self = {};
