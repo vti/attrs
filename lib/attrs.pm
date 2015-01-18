@@ -44,7 +44,8 @@ sub import {
     *{"$package\::new"} = sub {
         my $class = shift;
 
-        my (%params) = $class->can('BUILD_ARGS') ? $class->BUILD_ARGS(@_) : @_;
+        my (%params) =
+          defined &{"$package\::BUILD_ARGS"} ? $class->BUILD_ARGS(@_) : @_;
 
         my $attrs = {};
 
@@ -61,7 +62,7 @@ sub import {
         }
 
         my $self;
-        if (@$parents > 1 && $class->can('SUPER_CALL')) {
+        if (@$parents > 1 && defined &{"$class\::SUPER_CALL"}) {
             $self = $class->SUPER_CALL(%params);
         }
         else {
@@ -85,7 +86,7 @@ sub import {
               if $accessor && !$class->can($attr);
         }
 
-        $self->BUILD if $self->can('BUILD');
+        $self->BUILD if defined &{"$class\::BUILD"};
 
         return $self;
     };

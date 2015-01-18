@@ -126,6 +126,26 @@ subtest 'upgrading raw classes' => sub {
     is(Upgraded->new(bar => 1)->{hello}, 'there');
 };
 
+subtest 'super call not inherited' => sub {
+    {
+
+        package SuperCallNotInheritedBase;
+        sub new { bless {hello => 'there'}, shift }
+
+        package ChildSuperCallNotInheritedBase;
+        use base 'SuperCallNotInheritedBase';
+        use attrs 'bar';
+
+        sub SUPER_CALL { shift->SUPER::new(@_) }
+
+        package LatestChildSuperCallNotInheritedBase;
+        use base 'ChildSuperCallNotInheritedBase';
+        use attrs 'bar';
+    }
+
+    isnt(LatestChildSuperCallNotInheritedBase->new(bar => 1)->{hello}, 'there');
+};
+
 subtest 'build args' => sub {
     {
 
@@ -144,6 +164,27 @@ subtest 'build args' => sub {
     is(WithBuildArgs->new(1)->foo, 1);
 };
 
+subtest 'build args without inheritance' => sub {
+    {
+
+        package WithBuildArgsBase;
+        use attrs 'foo?';
+
+        sub BUILD_ARGS {
+            my $class = shift;
+            my ($foo) = @_;
+
+            return foo => $foo;
+        }
+
+        package ChildWithBuildArgsBase;
+        use base 'WithBuildArgsBase';
+        use attrs 'foo?';
+    }
+
+    is(ChildWithBuildArgsBase->new(foo => 1)->foo, 1);
+};
+
 subtest 'build' => sub {
     {
 
@@ -158,6 +199,26 @@ subtest 'build' => sub {
     }
 
     is(WithBuild->new->{else}, 'bar');
+};
+
+subtest 'build not inherited' => sub {
+    {
+
+        package WithBuildBase;
+        use attrs;
+
+        sub BUILD {
+            my $self = shift;
+
+            $self->{else} = 'bar';
+        }
+
+        package ChildWithBuildBase;
+        use base 'WithBuildBase';
+        use attrs;
+    }
+
+    isnt(ChildWithBuildBase->new->{else}, 'bar');
 };
 
 done_testing;
