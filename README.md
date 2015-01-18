@@ -14,7 +14,7 @@ sub new {
     bless $self, $class;
 
     $self->{score} = delete $params{score} or die 'score required';
-    $self->{score} = delete $params{page} || 1;
+    $self->{page}  = delete $params{page} || 1;
 
     die 'unknown parameters' if %params;
 
@@ -29,7 +29,7 @@ Hence `attrs`!
 
 ```
 package Foo;
-use attrs 'score', page => sub { 1 };
+use attrs 'score!', page => sub { 1 };
 
 package SomeOtherClass;
 use base 'Foo';

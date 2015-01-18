@@ -14,11 +14,14 @@ sub import {
 
     my %attrs = ();
     for (my $i = 0; $i < @params; $i++) {
-        my $value = {required => 1};
+        my $value = {};
 
         my $key = $params[$i];
         if ($key =~ s{\?$}{}) {
             $value->{accessor} = 1;
+        }
+        if ($key =~ s{\!$}{}) {
+            $value->{required} = 1;
         }
 
         if (@params > $i + 1) {

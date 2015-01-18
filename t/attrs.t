@@ -8,10 +8,20 @@ subtest 'throws on required element' => sub {
     {
 
         package Required;
-        use attrs 'foo';
+        use attrs 'foo!';
     }
 
     like exception { Required->new }, qr/foo required/;
+};
+
+subtest 'accepts not required' => sub {
+    {
+
+        package NotRequired;
+        use attrs 'foo';
+    }
+
+    ok(NotRequired->new);
 };
 
 subtest 'throws on unknown element' => sub {
@@ -29,11 +39,11 @@ subtest 'adds new attrs' => sub {
     {
 
         package Base2;
-        use attrs 'foo';
+        use attrs 'foo!';
 
         package Child2;
         use base 'Base2';
-        use attrs 'bar';
+        use attrs 'bar!';
     }
 
     like exception { Child2->new }, qr/bar required/;
@@ -150,7 +160,7 @@ subtest 'build args' => sub {
     {
 
         package WithBuildArgs;
-        use attrs 'foo?';
+        use attrs 'foo!?';
 
         sub BUILD_ARGS {
             my $class = shift;
